@@ -6,7 +6,11 @@ namespace Factory
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var factory = new AirConditioner().ExecuteCreation(Actions.Cooling, 22.5);
+            factory.Operate();
+
+            factory = new AirConditioner().ExecuteCreation(Actions.Warming, 32.5);
+            factory.Operate();
         }
     }
 }
