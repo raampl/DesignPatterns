@@ -4,6 +4,7 @@ namespace Factory
     public enum Actions
     {
         Cooling,
-        Warming
+        Warming,
+        RoomTemperature
     }
 }
