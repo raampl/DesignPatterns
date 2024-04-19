@@ -13,9 +13,9 @@ namespace Factory
             _factories = new Dictionary<Actions, AirConditionerFactory>
             {
                 { Actions.Cooling, new CoolingFactory() },
-                { Actions.Warming, new WarmingFactory() }
+                { Actions.Warming, new WarmingFactory() },
+                {Actions.RoomTemperature, new RoomTemperatureFactory()}
             };
-
 
             // With reflection, doesn't work on mac
             //_factories = new Dictionary<Actions, AirConditionerFactory>();
@@ -25,7 +25,6 @@ namespace Factory
             //    var factory = (AirConditionerFactory)Activator.CreateInstance(Type.GetType("FactoryMethod." + Enum.GetName(typeof(Actions), action) + "Factory"));
             //    _factories.Add(action, factory);
             //}
-
         }
 
         public IAirConditioner ExecuteCreation(Actions action, double temperature) => _factories[action].Create(temperature);
