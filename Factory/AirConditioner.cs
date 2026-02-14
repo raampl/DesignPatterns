@@ -14,7 +14,7 @@ namespace Factory
             {
                 { Actions.Cooling, new CoolingFactory() },
                 { Actions.Warming, new WarmingFactory() },
-                {Actions.RoomTemperature, new RoomTemperatureFactory()}
+                { Actions.RoomTemperature, new RoomTemperatureFactory()}
             };
 
             // With reflection, doesn't work on mac
