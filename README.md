@@ -70,6 +70,13 @@ graph TB
 | **Factory** | Object creation abstraction | `AirConditionerFactory` + 3 concrete factories |
 | **Product** | Business logic implementation | `IAirConditioner` + 3 concrete products |
 
+### Overview
+The Factory pattern implementation includes:
+- **IAirConditioner** - Interface defining the contract for all AC operations
+- **AirConditionerFactory** - Abstract base class that defines the factory creation contract
+- **Concrete Factories** - `CoolingFactory`, `WarmingFactory`, `RoomTemperatureFactory`
+- **Concrete Products** - `Cooling`, `Warming`, `RoomTemperature` classes implementing `IAirConditioner`
+- **AirConditioner Service** - Manages factories via a Dictionary and delegates object creation
 ---
 
 ## Factory Pattern
