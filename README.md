@@ -70,6 +70,12 @@ graph TB
 | **Factory** | Object creation abstraction | `AirConditionerFactory` + 3 concrete factories |
 | **Product** | Business logic implementation | `IAirConditioner` + 3 concrete products |
 
+---
+
+## Factory Pattern
+
+The Factory Method pattern is a creational design pattern that provides an interface for creating objects without specifying the exact classes to instantiate. This repository demonstrates the pattern using an air conditioning system.
+
 ### Overview
 The Factory pattern implementation includes:
 - **IAirConditioner** - Interface defining the contract for all AC operations
@@ -77,11 +83,6 @@ The Factory pattern implementation includes:
 - **Concrete Factories** - `CoolingFactory`, `WarmingFactory`, `RoomTemperatureFactory`
 - **Concrete Products** - `Cooling`, `Warming`, `RoomTemperature` classes implementing `IAirConditioner`
 - **AirConditioner Service** - Manages factories via a Dictionary and delegates object creation
----
-
-## Factory Pattern
-
-The Factory Method pattern is a creational design pattern that provides an interface for creating objects without specifying the exact classes to instantiate. This repository demonstrates the pattern using an air conditioning system.
 
 ### Class Diagram
 
