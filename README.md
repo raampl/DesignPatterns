@@ -3,21 +3,158 @@
 A .NET 8.0 repository demonstrating various design pattern implementations with practical examples.
 
 ## Table of Contents
+- [Architectural Overview](#architectural-overview)
 - [Factory Pattern](#factory-pattern)
 - [Building & Running](#building--running)
 - [Project Structure](#project-structure)
+
+## Architectural Overview
+
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        P[Program.cs]
+    end
+
+    subgraph "Service Layer"
+        AC[AirConditioner<br/>Service Class]
+    end
+
+    subgraph "Factory Layer"
+        AF[AirConditionerFactory<br/>Abstract Factory]
+        CF[CoolingFactory]
+        WF[WarmingFactory]
+        RF[RoomTemperatureFactory]
+    end
+
+    subgraph "Product Layer"
+        IA[IAirConditioner<br/>Interface]
+        C[Cooling]
+        W[Warming]
+        RT[RoomTemperature]
+    end
+
+    P --> AC
+    AC -->|ExecuteCreation<br/>Dictionary Lookup| AF
+    AC --> CF
+    AC --> WF
+    AC --> RF
+
+    CF -->|implements| AF
+    WF -->|implements| AF
+    RF -->|implements| AF
+
+    CF -->|creates| C
+    WF -->|creates| W
+    RF -->|creates| RT
+
+    C -->|implements| IA
+    W -->|implements| IA
+    RT -->|implements| IA
+
+    style P fill:#e1f5fe
+    style AC fill:#fff3e0
+    style AF fill:#e8f5e9
+    style IA fill:#f3e5f5
+    style C fill:#fce4ec
+    style W fill:#fce4ec
+    style RT fill:#fce4ec
+```
+
+### Architecture Layers
+
+| Layer | Purpose | Components |
+|-------|---------|------------|
+| **Client** | Entry point and usage | `Program.cs` |
+| **Service** | Factory management & delegation | `AirConditioner` class with Dictionary |
+| **Factory** | Object creation abstraction | `AirConditionerFactory` + 3 concrete factories |
+| **Product** | Business logic implementation | `IAirConditioner` + 3 concrete products |
+
+---
 
 ## Factory Pattern
 
 The Factory Method pattern is a creational design pattern that provides an interface for creating objects without specifying the exact classes to instantiate. This repository demonstrates the pattern using an air conditioning system.
 
-### Overview
-The Factory pattern implementation includes:
-- **IAirConditioner** - Interface defining the contract for all AC operations
-- **AirConditionerFactory** - Abstract base class that defines the factory creation contract
-- **Concrete Factories** - `CoolingFactory`, `WarmingFactory`, `RoomTemperatureFactory`
-- **Concrete Products** - `Cooling`, `Warming`, `RoomTemperature` classes implementing `IAirConditioner`
-- **AirConditioner Service** - Manages factories via a Dictionary and delegates object creation
+### Class Diagram
+
+```mermaid
+classDiagram
+    class IAirConditioner {
+        <<interface>>
+        +Operate() void
+    }
+
+    class AirConditionerFactory {
+        <<abstract>>
+        +Create(temperature) IAirConditioner
+    }
+
+    class Cooling {
+        -_temperature: double
+        +Operate() void
+    }
+
+    class Warming {
+        -_temperature: double
+        +Operate() void
+    }
+
+    class RoomTemperature {
+        -_temperature: double
+        +Operate() void
+    }
+
+    class CoolingFactory {
+        +Create(temperature) IAirConditioner
+    }
+
+    class WarmingFactory {
+        +Create(temperature) IAirConditioner
+    }
+
+    class RoomTemperatureFactory {
+        +Create(temperature) IAirConditioner
+    }
+
+    class AirConditioner {
+        -_factories: Dictionary~Actions, AirConditionerFactory~
+        +ExecuteCreation(action, temperature) IAirConditioner
+    }
+
+    class Actions {
+        <<enumeration>>
+        Cooling
+        Warming
+        RoomTemperature
+    }
+
+    IAirConditioner <|.. Cooling
+    IAirConditioner <|.. Warming
+    IAirConditioner <|.. RoomTemperature
+
+    AirConditionerFactory <|-- CoolingFactory
+    AirConditionerFactory <|-- WarmingFactory
+    AirConditionerFactory <|-- RoomTemperatureFactory
+
+    CoolingFactory ..> Cooling : creates
+    WarmingFactory ..> Warming : creates
+    RoomTemperatureFactory ..> RoomTemperature : creates
+
+    AirConditioner --> Actions
+    AirConditioner --> AirConditionerFactory
+```
+
+### Design Pattern Details
+
+| Element | Type | Description |
+|---------|------|-------------|
+| `IAirConditioner` | Interface | Defines the contract for all AC operations |
+| `AirConditionerFactory` | Abstract Class | Base factory defining creation contract |
+| `CoolingFactory` | Concrete Factory | Creates `Cooling` products |
+| `WarmingFactory` | Concrete Factory | Creates `Warming` products |
+| `RoomTemperatureFactory` | Concrete Factory | Creates `RoomTemperature` products |
+| `AirConditioner` | Service Class | Manages factories via Dictionary, delegates creation |
 
 ### Usage Example
 
@@ -53,7 +190,12 @@ dotnet build Factory/Factory.csproj
 dotnet run --project Factory/Factory.csproj
 ```
 
-Expected output demonstrates the three AC operations with their respective temperature settings and behaviors.
+Expected output:
+```
+Cooling the room to the required temperature of 22.5 degrees
+Warming the room to the required temperature of 35.0 degrees
+Setting Room temperature to the required temperature of 32.5 degrees
+```
 
 ---
 
@@ -83,10 +225,10 @@ DesignPatterns/
 ├── Factory/                    # Factory Method pattern implementation
 │   ├── IAirConditioner.cs      # AC interface
 │   ├── AirConditionerFactory.cs # Abstract factory base
-│   ├── Cooling.cs              # Concrete product
-│   ├── Warming.cs              # Concrete product
-│   ├── RoomTemperature.cs      # Concrete product
-│   ├── AirConditioner.cs       # Service class
+│   ├── Cooling.cs              # Concrete product + Factory
+│   ├── Warming.cs              # Concrete product + Factory
+│   ├── RoomTemperature.cs       # Concrete product + Factory
+│   ├── AirConditioner.cs        # Service class
 │   ├── Enum.cs                 # Actions enum
 │   └── Program.cs              # Entry point
 ├── DesignPatterns/             # Main project
